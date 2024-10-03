@@ -6,19 +6,30 @@
 
 def pascal_triangle(n):
     """
-    Returns a list of integers
-    representing the Pascal Triangle of n
-    returns empty list if n <= 0
+    Returns a list of lists of integers
+    representing Pascal's Triangle of n rows.
+    Returns an empty list if n <= 0.
     """
-    k = []
+    triangle = []
+
     if n <= 0:
-        return k
-    k = [[1]]
-    for i in range(1, n):
-        temp = [1]
-        for j in range(len(k[i - 1]) - 1):
-            curr = k[i - 1]
-            temp.append(k[i - 1][j] + k[i - 1][j + 1])
-        temp.append(1)
-        k.append(temp)
-    return k
+        return triangle
+
+    # The first row is always [1]
+    triangle = [[1]]
+
+    for row_num in range(1, n):
+        # Start the new row with [1]
+        row = [1]
+        
+        # Populate the current row with sums of adjacent numbers from the previous row
+        for col in range(1, len(triangle[row_num - 1])):
+            row.append(triangle[row_num - 1][col - 1] + triangle[row_num - 1][col])
+
+        # End the row with [1]
+        row.append(1)
+
+        # Append the constructed row to the triangle
+        triangle.append(row)
+
+    return triangle
