@@ -26,28 +26,33 @@ def canUnlockAll(boxes):
     if len(boxes) <= 1 or boxes == [[]]:
         return True
 
+    # Auxiliary dictionary to track opened boxes and their keys
     aux = {}
+    
+    # Start by opening box 0
+    aux[0] = {
+        'status': 'opened',
+        'keys': boxes[0],
+    }
+    
     while True:
-        if len(aux) == 0:
-            aux[0] = {
-                'status': 'opened',
-                'keys': boxes[0],
-            }
+        # Look for the next opened box to explore its keys
         keys = look_next_opened_box(aux)
+        
+        # If there are keys to explore
         if keys:
             for key in keys:
-                try:
-                    if aux.get(key) and aux.get(key).get('status') \
-                       == 'opened/checked':
-                        continue
+                # Only process valid keys and unopened boxes
+                if key < len(boxes) and not aux.get(key):
                     aux[key] = {
                         'status': 'opened',
                         'keys': boxes[key]
                     }
-                except (KeyError, IndexError):
-                    continue
+        # If no more keys are available for unopened boxes
         elif 'opened' in [box.get('status') for box in aux.values()]:
             continue
+        
+        # If all boxes have been opened, we're done
         elif len(aux) == len(boxes):
             break
         else:
