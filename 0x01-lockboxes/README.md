@@ -15,7 +15,7 @@ The first box boxes[0] is unlocked
 Return True if all boxes can be opened, else return False
 
 Example:
-`bash`
+``bash
 carrie@ubuntu:~/0x01-lockboxes$ cat main_0.py
 #!/usr/bin/python3
 
@@ -35,3 +35,4 @@ True
 True
 False
 carrie@ubuntu:~/0x01-lockboxes$
+``
