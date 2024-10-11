@@ -1,65 +1,22 @@
-#!/usr/bin/python3
-"""Solves the lock boxes puzzle """
-
-
-def look_next_opened_box(opened_boxes):
-    """Looks for the next opened box
-    Args:
-        opened_boxes (dict): Dictionary which contains boxes already opened
-    Returns:
-        list: List with the keys contained in the opened box
-    """
-    for index, box in opened_boxes.items():
-        if box.get('status') == 'opened':
-            box['status'] = 'opened/checked'
-            return box.get('keys')
-    return None
-
-
 def canUnlockAll(boxes):
-    """Check if all boxes can be opened
-    Args:
-        boxes (list): List which contain all the boxes with the keys
-    Returns:
-        bool: True if all boxes can be opened, otherwise, False
-    """
-    if len(boxes) <= 1 or boxes == [[]]:
-        return True
-
-    aux = {}
-    while True:
-        if len(aux) == 0:
-            aux[0] = {
-                'status': 'opened',
-                'keys': boxes[0],
-            }
-        keys = look_next_opened_box(aux)
-        if keys:
-            for key in keys:
-                try:
-                    if aux.get(key) and aux.get(key).get('status') \
-                       == 'opened/checked':
-                        continue
-                    aux[key] = {
-                        'status': 'opened',
-                        'keys': boxes[key]
-                    }
-                except (KeyError, IndexError):
-                    continue
-        elif 'opened' in [box.get('status') for box in aux.values()]:
-            continue
-        elif len(aux) == len(boxes):
-            break
-        else:
-            return False
-
-    return len(aux) == len(boxes)
-
-
-def main():
-    """Entry point"""
-    canUnlockAll([[]])
-
-
-if __name__ == '__main__':
-    main()
+    # Start with box 0 unlocked
+    opened_boxes = set([0])
+    # Stack to explore keys from opened boxes
+    keys_to_explore = [0]
+    
+    # While there are keys to explore
+    while keys_to_explore:
+        # Get the next key
+        current_box = keys_to_explore.pop()
+        
+        # Check all keys inside the current box
+        for key in boxes[current_box]:
+            # If the key opens a box that isn't opened yet
+            if key not in opened_boxes and key < len(boxes):
+                # Mark the box as opened
+                opened_boxes.add(key)
+                # Add the new box's keys to the stack for exploration
+                keys_to_explore.append(key)
+    
+    # If the number of opened boxes matches the total number of boxes, return True
+    return len(opened_boxes) == len(boxes)
